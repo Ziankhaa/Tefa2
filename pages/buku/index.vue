@@ -8,7 +8,7 @@
                     <input v-model="keyword" type="search" class="form-contol rounded-5" placeholder="mau baca apa hari ini ?">
                     </form>
                 </div>
-                <div class="my-3 text-muted fs-6">menampilkan {{  books.length }} dari {{ jumlah }}</div>
+                <div class="my-3 text-muted fs-6">menampilkan {{ books.length }} dari {{ jumlah }}</div>
                 <div class="row">
                     <div v-for="(book,i) in books" :key="i" class="col-lg-2 pb-5">
                         <div class="card mb-3 dcdc">
@@ -28,9 +28,11 @@
 </template>
 
 <script setup>
+
 const supabase = useSupabaseClient()
+
 const books = ref([])
-const jumlah =(0)
+const jumlah = ref(0)
 const keyword = ref('')
 
 
@@ -39,11 +41,10 @@ const getBooks= async () => {
         .ilike('judul', `%${keyword.value}%`)
         if(data) books.value = data
 }
-
-    const totalBuku = async () => {
-        const { data, count } = await supabase.from('buku').select("*", {count: 'exact'})
-        if (data) jumlah.value = count
-    }
+const totalBuku = async () => {
+    const {data,count} = await supabase.from('buku').select('*' , { count:'exact' })
+    if (data) jumlah.value = count
+}
 
 onMounted(() => {
     getBooks()
