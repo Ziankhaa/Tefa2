@@ -32,7 +32,7 @@
   const getBookById = async () => {
     const {data, error} = await supabase
       .from('buku')
-      .select(`*, kategori(*)`)
+      .select(`*, kategori_buku(*)`)
       .eq('id', route.params.id)
       .single()
     if(data) buku.value = data
