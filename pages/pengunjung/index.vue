@@ -6,7 +6,7 @@
                 <div class="my-3">
                     <input type="search" class="form-control form-control-lg rounded-5" placeholder="filter...">
                 </div>
-                <div class="my-3 text-muted">Menampilkan 1 dari 1</div>
+                <div class="my-3 text-muted">Menampilkan {{ visitors.length }} dari {{ jumlah }}</div>
                 <table class="table">
                     <thead>
                         <tr>
@@ -39,13 +39,19 @@
 const supabase = useSupabaseClient()
 
 const visitors = ref ([])
+const jumlah = ref(0)
 
 const getPengunjung = async () => {
     const { data, error } = await supabase.from('pengunjung').select(`*,keanggotaan(*), keperluan(*)`)
     if(data) visitors.value = data
 }
+const totalPengunjung = async () => {
+    const {data,count} = await supabase.from('pengunjung').select('*' , { count:'exact' })
+    if (data) jumlah.value = count
+}
 
 onMounted(() => {
     getPengunjung()
+    totalPengunjung()
 })
 </script>
